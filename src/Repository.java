@@ -282,16 +282,33 @@ public class Repository {
         } catch (Exception e) {
             e.printStackTrace();
         }
-/*
-        select  brand.brand as Brand, avg(grade_choiceid) as Avrage_Grade
-        from grade
-        left join brand
-        on brand.id = grade.shoesid
-                --  group by shoes.id;
-        where grade.shoesid = 1
+    }
 
- */
+    public List<String> getShoesComments(int shoesId) {
 
+        String comments = "";
 
+        List<String> commentsList = new ArrayList<>();
+        ResultSet rs;
+
+        try (Connection con = DriverManager.getConnection(p.getProperty("url"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+             PreparedStatement stmt = con.prepareStatement("select comments \n" +
+                     "from grade \n" +
+                     "where grade.shoesid = ?\n" +
+                     "group by comments;")) {
+            stmt.setInt(1, shoesId);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                comments = rs.getString("comments");
+                commentsList.add(comments);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return commentsList;
     }
 }

@@ -1,3 +1,4 @@
+import java.lang.invoke.SwitchPoint;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -20,6 +21,7 @@ public class Main {
     private int userInput;
     private int gradeChoice;
     private String comment ="";
+    private List<String> commentsList;
 
     public Main () {
 
@@ -31,33 +33,19 @@ public class Main {
         customerNumber = r.logIn(firstName,password);
         customerOrder = r.getOrderId(customerNumber);
 
-
-        System.out.println("Vilken sko vill du lägga till i beställningen?");
-        System.out.println("Följande produkter finns:");
-        productList = r.getProductList();
-        productList.forEach(Product::printInfo);
-
-        System.out.println();
-        System.out.println("vilken sko vill du se betyg på?");
-        r.getShoeGrade(getProductId());
-        System.out.println("Vilket märke?");
-        brandChoice = sc.nextLine().trim().toLowerCase();
-
-        System.out.println("Vilken storlek?");
-        sizeChoice = sc.nextInt();
-        productId = r.getProduct(brandChoice,sizeChoice);
+        choiceMeny();
 
 
-        System.out.println("Ange antal par:");
-        shoeAmount = sc.nextInt();
-        feedback = r.addToCart(customerNumber,customerOrder,productId,shoeAmount);
-        System.out.println(feedback);
 
+
+
+
+/*
         System.out.println("1) Se din order\n" + "2) Bekräfta order\n" + "3) Avsluta");
 
         userInput = sc.nextInt();
         switch (userInput){
-            case 1 -> r.getCustomerOrder(customerNumber,customerOrder).forEach(Product::printOrderInfo);
+            case 1 ->
             case 2 -> System.out.println("lägg till metod");
             case 3 -> {
                 System.out.println("Programmet avslutas");
@@ -67,26 +55,24 @@ public class Main {
         }
         sc.nextLine();
 
-       // setGrade();
+        setGrade();
 
-
+        System.out.println("vilken sko vill du se betyg på?");
+        productId = getProductId();
+        r.getShoeGrade(productId);
+        System.out.println("Med kommentarerna: ");
+        commentsList = r.getShoesComments(productId);
+        commentsList.forEach(System.out::println);*/
     }
 
 
-    public static void main(String[] args) {
 
-        Main main = new Main();
-
-    }
 
     public void setGrade () {
 
         System.out.println("Vilken av dina produkter vill du betygsätta?");
         r.getCustomerOrder(customerNumber,customerOrder).forEach(Product::printOrderInfo);
-        System.out.println("Ange märke och storlek på produkten du vill betygsätta:");
-        System.out.println("Vilket märke?");
-
-       getProductId();
+        productId = getProductId();
 
         System.out.println("Vilket betyg vill du ge?");
         System.out.println("1 - Mycket missnöjd.");
@@ -104,16 +90,81 @@ public class Main {
 
         System.out.println(r.rate(gradeChoice,comment,customerNumber,productId));
 
+        choiceMeny();
     }
 
     public int getProductId () {
 
-
+        System.out.println("Vilket märke?");
         brandChoice = sc.next().trim().toLowerCase();
         System.out.println("Vilken storlek?");
         sizeChoice = sc.nextInt();
         sc.nextLine();
-        return productId = r.getProduct(brandChoice,sizeChoice);
+        return r.getProduct(brandChoice,sizeChoice);
 
     }
+
+
+    public void choiceMeny () {
+        System.out.println(
+            "1. Lägga till i varukorgen \n" +
+            "2. Se varukorgen \n" +
+            "3. Sätta betyg och omdöme på skor \n" +
+            "4. Se betyg och omdömen på skor \n" +
+            "5. Logga ut");
+        int customerChoice = sc.nextInt();
+
+        switch (customerChoice) {
+            case 1 -> addProducts();
+            case 2 -> printCustomerOrder();
+            case 3 -> setGrade ();
+            case 4 -> getGrade();
+            case 5 -> System.exit(0);
+        }
+
+    }
+
+    public void addProducts (){
+
+        System.out.println("Följande produkter finns:");
+        productList = r.getProductList();
+        productList.forEach(Product::printInfo);
+        System.out.println("Vilken sko vill du lägga till i beställningen?");
+        productId = getProductId();
+        System.out.println("Ange antal par:");
+        shoeAmount = sc.nextInt();
+        feedback = r.addToCart(customerNumber,customerOrder,productId,shoeAmount);
+        System.out.println(feedback);
+
+        choiceMeny();
+    }
+
+    public void printCustomerOrder () {
+        r.getCustomerOrder(customerNumber, customerOrder).forEach(Product::printOrderInfo);
+
+        choiceMeny();
+    }
+
+    public void getGrade (){
+        System.out.println("Vilken produkt vill du se betyg och omdöme för?");
+        productList = r.getProductList();
+        productList.forEach(Product::printInfo);
+
+        productId = getProductId();
+        r.getShoeGrade(productId);
+        System.out.println("Med kommentarerna:");
+        commentsList = r.getShoesComments(productId);
+        commentsList.forEach(System.out::println);
+
+        choiceMeny();
+
+    }
+
+
+    public static void main(String[] args) {
+        Main main = new Main();
+
+    }
+
+
 }
