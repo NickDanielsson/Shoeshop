@@ -3,7 +3,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-//ta bort!
+
 public class Repository {
 
     protected Properties p = new Properties();
@@ -296,7 +296,7 @@ public class Repository {
                 p.getProperty("password"));
              PreparedStatement stmt = con.prepareStatement("select comments \n" +
                      "from grade \n" +
-                     "where grade.shoesid = ?\n" +
+                     "where grade.shoesid = ? \n" +
                      "group by comments;")) {
             stmt.setInt(1, shoesId);
             rs = stmt.executeQuery();

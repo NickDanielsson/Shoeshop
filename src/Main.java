@@ -12,7 +12,7 @@ public class Main {
     private List<Product> productList;
     private int customerNumber;
     private int customerOrder = 0;
-    private  String brandChoice = "";
+    private String brandChoice = "";
     private int sizeChoice = 0;
     private int shoeAmount = 0;
     private int productId = 0;
@@ -20,29 +20,27 @@ public class Main {
     private List<Product> customerOrderList;
     private int userInput;
     private int gradeChoice;
-    private String comment ="";
+    private String comment = "";
     private List<String> commentsList;
 
-    public Main () {
+    public Main() {
 
         System.out.println("Ange ditt förnamn:");
         firstName = sc.nextLine().trim().toLowerCase();
         System.out.println("Ange ditt lösenord:");
         password = sc.nextLine().trim().toLowerCase();
 
-        customerNumber = r.logIn(firstName,password);
+        customerNumber = r.logIn(firstName, password);
         customerOrder = r.getOrderId(customerNumber);
 
         choiceMeny();
     }
 
 
-
-
-    public void setGrade () {
+    public void setGrade() {
 
         System.out.println("Vilken av dina produkter vill du betygsätta?");
-        r.getCustomerOrder(customerNumber,customerOrder).forEach(Product::printOrderInfo);
+        r.getCustomerOrder(customerNumber, customerOrder).forEach(Product::printOrderInfo);
         productId = getProductId();
 
         System.out.println("Vilket betyg vill du ge?");
@@ -59,54 +57,43 @@ public class Main {
 
         comment = sc.nextLine();
 
-        System.out.println(r.rate(gradeChoice,comment,customerNumber,productId));
+        System.out.println(r.rate(gradeChoice, comment, customerNumber, productId));
 
         choiceMeny();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    public int getProductId () {
+    public int getProductId() {
 
         System.out.println("Vilket märke?");
         brandChoice = sc.next().trim().toLowerCase();
         System.out.println("Vilken storlek?");
         sizeChoice = sc.nextInt();
         sc.nextLine();
-        return r.getProduct(brandChoice,sizeChoice);
+        return r.getProduct(brandChoice, sizeChoice);
 
     }
 
 
-    public void choiceMeny () {
+    public void choiceMeny() {
         System.out.println(
-            "1. Lägga till i varukorgen \n" +
-            "2. Se varukorgen \n" +
-            "3. Sätta betyg och omdöme på skor \n" +
-            "4. Se betyg och omdömen på skor \n" +
-            "5. Logga ut");
+                "1. Lägga till i varukorgen \n" +
+                        "2. Se varukorgen \n" +
+                        "3. Sätta betyg och omdöme på skor \n" +
+                        "4. Se betyg och omdömen på skor \n" +
+                        "5. Logga ut");
         int customerChoice = sc.nextInt();
 
         switch (customerChoice) {
             case 1 -> addProducts();
             case 2 -> printCustomerOrder();
-            case 3 -> setGrade ();
+            case 3 -> setGrade();
             case 4 -> getGrade();
             case 5 -> System.exit(0);
         }
 
     }
 
-    public void addProducts (){
+    public void addProducts() {
 
         System.out.println("Följande produkter finns:");
         productList = r.getProductList();
@@ -115,19 +102,19 @@ public class Main {
         productId = getProductId();
         System.out.println("Ange antal par:");
         shoeAmount = sc.nextInt();
-        feedback = r.addToCart(customerNumber,customerOrder,productId,shoeAmount);
+        feedback = r.addToCart(customerNumber, customerOrder, productId, shoeAmount);
         System.out.println(feedback);
 
         choiceMeny();
     }
 
-    public void printCustomerOrder () {
+    public void printCustomerOrder() {
         r.getCustomerOrder(customerNumber, customerOrder).forEach(Product::printOrderInfo);
 
         choiceMeny();
     }
 
-    public void getGrade (){
+    public void getGrade() {
         System.out.println("Vilken produkt vill du se betyg och omdöme för?");
         productList = r.getProductList();
         productList.forEach(Product::printInfo);
@@ -150,3 +137,13 @@ public class Main {
 
 
 }
+
+
+
+
+
+/*        for (int i = 0; i < commentsList.size()-1; i++) {
+            if (commentsList.get(i) != "")
+                System.out.println(commentsList.get(i));
+        }*/
+
