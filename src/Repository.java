@@ -3,7 +3,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
+//ta bort!
 public class Repository {
 
     protected Properties p = new Properties();
