@@ -167,16 +167,18 @@ public class Repository {
             stmt.setInt(4, quantity);
             rowsChanged = stmt.executeUpdate();
 
+
             if (rowsChanged == 0) {
+
                 message = "Fel uppstod, skon lades inte till i beställningen!";
-
+                return message;
             }
-            if (rowsChanged >= 1) {
+            if (rowsChanged < 0) {
                 message = "Skon lades till i beställningen!";
-
+                return message;
             }
 
-            }catch (SQLException esql){
+        } catch (SQLException esql) {
             System.out.println(esql.getErrorCode() + ", " + esql.getMessage());
 
         } catch (Exception e) {
@@ -184,5 +186,112 @@ public class Repository {
         }
 
         return message;
+    }
+
+    public List<Product> getCustomerOrder(int currentCustomerId, int currentOrderId) {
+
+        List<Product> productList = new ArrayList<>();
+        ResultSet rs;
+        try (Connection con = DriverManager.getConnection(p.getProperty("url"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+             PreparedStatement stmt = con.prepareStatement("SELECT brandid as id, size, color, price, quantity\n" +
+                     "FROM customer\n" +
+                     "JOIN brand\n" +
+                     "JOIN orders ON customerid=customer.id\n" +
+                     "JOIN orders_info ON ordersid= orders.id \n" +
+                     "JOIN shoes ON shoesid=shoes.id and brandid=brand.id\n" +
+                     "where orders.customerid like ? and ordersid like ?;")) {
+            stmt.setInt(1, currentCustomerId);
+            stmt.setInt(2, currentOrderId);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Product product = new Product(rs.getInt("id"), rs.getInt("size"),
+                        rs.getString("color"), rs.getDouble("price"), rs.getInt("quantity"));
+                productList.add(product);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return productList;
+
+    }
+
+    public String rate(int grade_choiceId, String comment, int customerId, int shoeId) {
+
+        int rowsChanged = 0;
+        String message = "";
+
+        try (Connection con = DriverManager.getConnection(p.getProperty("url"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+             CallableStatement stmt = con.prepareCall("CALL Rate(?,?,?,?)")) {
+            stmt.setInt(1, grade_choiceId);
+            stmt.setString(2, comment);
+            stmt.setInt(3, customerId);
+            stmt.setInt(4, shoeId);
+            rowsChanged = stmt.executeUpdate();
+
+
+            if (rowsChanged < 0) {
+
+                message = "Fel uppstod, betyg lades inte till!";
+                return message;
+            }
+            if (rowsChanged == 0) {
+                message = "Betyg lades till!";
+                return message;
+            }
+
+        } catch (SQLException esql) {
+            System.out.println(esql.getErrorCode() + ", " + esql.getMessage());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return message;
+    }
+
+    public void getShoeGrade(int shoeId) {
+
+        double averageGrade = 0;
+        String brandName = "";
+        ResultSet rs;
+        try (Connection con = DriverManager.getConnection(p.getProperty("url"),
+                p.getProperty("name"),
+                p.getProperty("password"));
+             PreparedStatement stmt = con.prepareStatement("select  brand.brand as Brand, avg(grade_choiceid) as Average_Grade \n" +
+                     "from grade\n" +
+                     "join brand\n" +
+                     "join shoes\n" +
+                     "\ton brand.id = shoes.brandid\n" +
+                     "    on grade.shoesid = shoes.id\n" +
+                     "    where grade.shoesid = ?;")) {
+            stmt.setInt(1, shoeId);
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                brandName = rs.getString("Brand");
+                averageGrade = rs.getDouble("Average_Grade");
+                System.out.println("Medelbetyg för " + brandName + " är: " + averageGrade);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+/*
+        select  brand.brand as Brand, avg(grade_choiceid) as Avrage_Grade
+        from grade
+        left join brand
+        on brand.id = grade.shoesid
+                --  group by shoes.id;
+        where grade.shoesid = 1
+
+ */
+
+
     }
 }

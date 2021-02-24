@@ -6,7 +6,16 @@ public class Product {
     private String color;
     private double price;
     private int numberInStock;
+    private int quantity;
     private Repository r = new Repository();
+
+    public Product (int brand, int size, String color, double price, int quantity) {
+        this.brand = brand;
+        this.size = size;
+        this.color = color;
+        this.price = price;
+        this.quantity = quantity;
+    }
 
     public Product(int id, int size, int brand, String color, double price, int numberInStock) {
         this.id = id;
@@ -66,6 +75,12 @@ public class Product {
     }
 
     public void printInfo () {
-        System.out.println("Märke: " + r.brandName(this.brand) + " " + this.size + " " + this.color + " " + this.price);
+        System.out.println("Märke: " + r.brandName(this.brand) + ", Storlek: " + this.size + ", Färg: " +
+                this.color + ", Pris: " + this.price);
+    }
+
+    public void printOrderInfo() {
+        System.out.println("Märke: " + r.brandName(this.brand) + ", Storlek: " + this.size + ", Färg: " +
+                this.color + ", Pris: " + this.price + ", Antal: " + this.quantity);
     }
 }
