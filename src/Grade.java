@@ -1,46 +1,33 @@
 public class Grade {
 
     private int id;
-    private int customerId;
-    private int shoeId;
-    private int gradeChoiceId;
+    private Customer customerId;
+    private Product productId;
+    private Grade_choice gradeChoiceId;
+    private String comments = "";
 
-    public Grade(int id, int customerId, int shoeId, int gradeChoiceId) {
+    public Grade(int id, Customer customerId, Product productId, Grade_choice gradeChoiceId, String comments) {
         this.id = id;
         this.customerId = customerId;
-        this.shoeId = shoeId;
+        this.productId = productId;
         this.gradeChoiceId = gradeChoiceId;
+        this.comments = comments;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCustomerId() {
+    public Customer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public Product getProductId() {
+        return productId;
     }
 
-    public int getShoeId() {
-        return shoeId;
-    }
-
-    public void setShoeId(int shoeId) {
-        this.shoeId = shoeId;
-    }
-
-    public int getGradeChoiceId() {
+    public Grade_choice getGradeChoiceId() {
         return gradeChoiceId;
     }
 
-    public void setGradeChoiceId(int gradeChoiceId) {
-        this.gradeChoiceId = gradeChoiceId;
+    public String getComments() {
+        return comments;
     }
 }
+
