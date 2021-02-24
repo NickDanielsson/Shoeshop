@@ -34,35 +34,6 @@ public class Main {
         customerOrder = r.getOrderId(customerNumber);
 
         choiceMeny();
-
-
-
-
-
-
-/*
-        System.out.println("1) Se din order\n" + "2) Bekräfta order\n" + "3) Avsluta");
-
-        userInput = sc.nextInt();
-        switch (userInput){
-            case 1 ->
-            case 2 -> System.out.println("lägg till metod");
-            case 3 -> {
-                System.out.println("Programmet avslutas");
-                System.exit(0);
-            }
-            default -> System.out.println("JAMEN TJABA TJABA!");
-        }
-        sc.nextLine();
-
-        setGrade();
-
-        System.out.println("vilken sko vill du se betyg på?");
-        productId = getProductId();
-        r.getShoeGrade(productId);
-        System.out.println("Med kommentarerna: ");
-        commentsList = r.getShoesComments(productId);
-        commentsList.forEach(System.out::println);*/
     }
 
 
@@ -92,6 +63,17 @@ public class Main {
 
         choiceMeny();
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public int getProductId () {
 
