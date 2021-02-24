@@ -75,12 +75,15 @@ public class Main {
 
 
     public void choiceMeny() {
+        System.out.println("*****************************");
         System.out.println(
                 "1. Lägga till i varukorgen \n" +
                         "2. Se varukorgen \n" +
                         "3. Sätta betyg och omdöme på skor \n" +
                         "4. Se betyg och omdömen på skor \n" +
                         "5. Logga ut");
+        System.out.println("*****************************");
+
         int customerChoice = sc.nextInt();
 
         switch (customerChoice) {
@@ -109,6 +112,7 @@ public class Main {
     }
 
     public void printCustomerOrder() {
+        System.out.println("Här är dina produkter:");
         r.getCustomerOrder(customerNumber, customerOrder).forEach(Product::printOrderInfo);
 
         choiceMeny();
